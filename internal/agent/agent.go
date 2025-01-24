@@ -22,9 +22,26 @@ func (a *Agent) GetOptimizedChanges(ctx context.Context, article *article2.Artic
 	changes []*article2.Change,
 	err error,
 ) {
+	systemMessage, err := InsertValues(
+		optimizeSystemPrompt, map[string]any{
+			"EditRules":       &editRules,
+			"ContentRules":    &contentRules,
+			"OutputRules":     &outputRules,
+			"OutputFormat":    &outputFormat,
+			"ReplaceExamples": &replaceExamples,
+		},
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to insert values: %w", err)
+	}
+
 	userMessage, err := InsertValues(
-		optimizeUserPrompt, map[string]string{
-			"Content": article.Content,
+		optimizeUserPrompt, map[string]any{
+			"Content":      article.Content,
+			"EditRules":    &editRules,
+			"ContentRules": &contentRules,
+			"OutputRules":  &outputRules,
+			"OutputFormat": &outputFormat,
 		},
 	)
 	if err != nil {
@@ -38,7 +55,7 @@ func (a *Agent) GetOptimizedChanges(ctx context.Context, article *article2.Artic
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleSystem,
-					Content: optimizeSystemPrompt,
+					Content: systemMessage,
 				},
 				{
 					Role:    openai.ChatMessageRoleUser,
@@ -55,6 +72,7 @@ func (a *Agent) GetOptimizedChanges(ctx context.Context, article *article2.Artic
 
 	responseContent := resp.Choices[0].Message.Content
 
+	fmt.Printf("Response for article: %s\n", article.FilePath)
 	fmt.Println(responseContent)
 
 	responseChanges := ExtractTags("change", responseContent)
