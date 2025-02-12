@@ -1,6 +1,11 @@
-package agent
+package llm
 
-var replaceExamples = `Replace: The unfinished stuff from
+var replaceExamples = `Here are some incorrect replacement examples that introduce various errors.
+Use these only as examples, do not follow them word by word if you encounter a similar issue.
+
+Examples:
+
+Replace: The unfinished stuff from
 Incorrect: Unfinished tasks from from
 Correct: Unfinished tasks from
 

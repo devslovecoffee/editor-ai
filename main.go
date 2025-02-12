@@ -4,9 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"optimiseo/internal/agent"
-	"optimiseo/pkg/io/file"
 	"path/filepath"
+
+	"github.com/petttr1/editor-ai/internal/llm"
+	"github.com/petttr1/editor-ai/pkg/io/file"
 )
 
 func main() {
@@ -29,13 +30,14 @@ func main() {
 		panic(err)
 	}
 
-	llmAgent := agent.NewAgent(*apiKey)
+	llmClient := llm.NewClient(*apiKey)
 	for _, article := range articles {
-		changes, err := llmAgent.GetOptimizedChanges(ctx, article)
+		changes, err := llmClient.GetOptimizedChanges(ctx, article)
 		if err != nil {
 			fmt.Printf("failed to get optimized changes: %v\n", err)
 			continue
 		}
+
 		article.AddChange(changes...)
 		fmt.Printf("Optimized %d changes for article %s\n", len(changes), filepath.Base(article.FilePath))
 		article.ApplyChanges()

@@ -3,9 +3,10 @@ package file
 import (
 	"fmt"
 	"io/fs"
-	"optimiseo/internal/article"
 	"os"
 	"path"
+
+	"github.com/petttr1/editor-ai/internal/article"
 )
 
 type Reader struct{}
@@ -15,14 +16,14 @@ func NewReader() *Reader {
 }
 
 func (r *Reader) Load(url, glob string) ([]*article.Article, error) {
-	filepaths, err := getFilepaths(url, glob)
+	filepaths, err := r.getFilepaths(url, glob)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get filepaths: %w", err)
 	}
 
 	articles := make([]*article.Article, 0)
 	for _, v := range filepaths {
-		content, err := readFileContent(v)
+		content, err := r.readFileContent(v)
 		if err != nil {
 			fmt.Printf("failed to read file content: %v\n", err)
 			continue
@@ -33,7 +34,7 @@ func (r *Reader) Load(url, glob string) ([]*article.Article, error) {
 	return articles, nil
 }
 
-func getFilepaths(url, glob string) ([]string, error) {
+func (r *Reader) getFilepaths(url, glob string) ([]string, error) {
 	root := os.DirFS(url)
 
 	filteredFiles, err := fs.Glob(root, glob)
@@ -50,7 +51,7 @@ func getFilepaths(url, glob string) ([]string, error) {
 	return files, nil
 }
 
-func readFileContent(filepath string) (string, error) {
+func (r *Reader) readFileContent(filepath string) (string, error) {
 	file, err := os.ReadFile(filepath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read file: %w", err)

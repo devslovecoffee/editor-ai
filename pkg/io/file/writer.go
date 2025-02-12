@@ -2,8 +2,9 @@ package file
 
 import (
 	"fmt"
-	"optimiseo/internal/article"
 	"os"
+
+	"github.com/petttr1/editor-ai/internal/article"
 )
 
 type Writer struct{}
@@ -14,7 +15,7 @@ func NewWriter() *Writer {
 
 func (w *Writer) Write(articles []*article.Article) error {
 	for _, v := range articles {
-		err := writeFile(v)
+		err := w.writeFile(v)
 		if err != nil {
 			return err
 		}
@@ -23,7 +24,7 @@ func (w *Writer) Write(articles []*article.Article) error {
 	return nil
 }
 
-func writeFile(article *article.Article) error {
+func (w *Writer) writeFile(article *article.Article) error {
 	err := os.WriteFile(article.FilePath, []byte(article.Content), 0644)
 	if err != nil {
 		return fmt.Errorf("failed to write file: %w", err)

@@ -1,6 +1,7 @@
-package agent
+package llm
 
-var editRules = `Decide what you’re actually saying
+var editRules = `Here are the rules that describe how to approach the editing process:
+- Decide what you’re actually saying.
 - Who are you writing for?
 - What is your main point? 
 
@@ -23,10 +24,12 @@ Be aware of your tone
 - Know what kind of tone you’re going for, and be consistent.
 - Don't switch between formal / non-formal tones.`
 
-var contentRules = `- NEVER change the contents of a code block.
+var contentRules = `Here are the rules that describe how to handle the content:
+- NEVER change the contents of a code block.
 - NEVER change links.
-- Avoid introducing any errors to the content structure (e.g., Yaml header)`
+- Avoid introducing any errors to the content structure (e.g. Yaml header).`
 
-var outputRules = `- For each optimization you find, output a separate change that can be replaced directly in the text.
+var outputRules = `Here are the rules that describe how to output the changes:
+- For each optimization you find, output a separate change that can be replaced directly in the text.
 - Each search term MUST be unique and match exactly once.
 - Always consider the context of the full sentence before making a change and do not introduce grammatical errors.`
