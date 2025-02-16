@@ -5,21 +5,21 @@ Made by [@devslovecoffee](https://www.devslovecoffee.com/)
 
 ## Overview
 
-When writing, it's crucial to focus on content creation without distractions. **Editor AI** is an open-source **AI-powered content editing tool** that automatically improves content using **Large Language Models (LLMs)**.
+Writing requires a focus on content creation without distractions. **Editor AI** is an open-source **AI-powered content editing tool** that automatically enhances content with **Large Language Models (LLMs)**.
 
-By leveraging **automated editing and SEO optimization**, Editor AI ensures your content remains **high-quality, engaging, and up-to-date**, without extra effort.
+By utilizing **automated editing and search engine optimization (SEO)**, Editor AI ensures your content remains **high-quality, engaging, and up-to-date**, without extra effort.
 
-Why use Editor AI?
-- AI-driven editing – Automatically refines your writing. 
+Benefits of Using Editor AI
+- AI-driven editing – It refines your writing efficiently. 
 - Boosts SEO – Keeps content fresh and optimized for search engines.
-- Hands-free workflow – No manual editing required.
+- Hands-free workflow – It eliminates the need for manual editing.
 
 ## How It Works
 
-Editor AI scans and enhances your content using AI-based text optimization:
+Editor AI improves your content through AI-based text optimization:
 1. Reads content from the specified directory.
 2. Uses **LLM-powered optimization** to refine and improve the text.
-3. Applies the optimized changes to your files.
+3. Applies any enhancements directly to your files.
 4. Saves the improved content automatically.
 
 ## Prerequisites
@@ -29,7 +29,7 @@ Editor AI scans and enhances your content using AI-based text optimization:
 
 ## Installation
 
-Clone the repository and navigate to the project directory:
+To get started, clone the repository and navigate to the project directory:
 
 ```sh
 git clone https://github.com/petttr1/editor-ai.git
@@ -44,7 +44,7 @@ Run the program with the required flags:
 go run main.go --dir "absolute/path/to/files" --api_key "your_openai_api_key"
 ```
 
-Optionally, you can specify a glob pattern to filter specific files (e.g. markdown):
+If desired, specify a glob pattern to target particular files (e.g., markdown):
 
 ```sh
 go run main.go --dir "absolute/path/to/files" --api_key "your_openai_api_key" --glob "*.md"
@@ -60,7 +60,7 @@ go run main.go --dir "absolute/path/to/files" --api_key "your_openai_api_key" --
 
 ### Customization
 
-> **Note:** Currently, customization is only possible in the code. Future updates will include configuration file support. 
+> **Note:** At present, customization is achievable through code modifications. Future updates will include configuration file support. 
 
 In order to achieve better results, you can customize the following:
 
