@@ -1,9 +1,9 @@
 # Editor AI: AI-Powered Content Editing for Everyone
 by [@devslovecoffee](https://www.devslovecoffee.com/)
 
-<p style="text-align: center; width: 100%;">
+<p align="center" width="100%">
     <img src="./assets/EAi_logo.svg" alt="Editor AI Logo" style="width: 20%;">
-    <br> 🚀 Automate text optimization with Large Language Models (LLMs)
+    <br><em>🚀 Automate text optimization with Large Language Models (LLMs)</em>
 </p>
 
 ## Overview
