@@ -1,19 +1,26 @@
-# Editor AI
+# Editor AI: AI-Powered Content Editing for Everyone
 
+🚀 Automate text optimization with Large Language Models (LLMs)
 Made by [@devslovecoffee](https://www.devslovecoffee.com/)
 
 ## Overview
 
-When writing, I find it best to focus solely on creating the content, without being distracted by editing. Automated content editing and optimization is now possible thanks to Large Language Models (LLMs). This tool was created to streamline the editing process by automatically refining and improving text files with your content. 
+When writing, it's crucial to focus on content creation without distractions. **Editor AI** is an open-source **AI-powered content editing tool** that automatically improves content using **Large Language Models (LLMs)**.
 
-Additionally, periodic content updates help boost SEO and overall visibility, making Editor AI valuable for content creators who want to maintain high-quality, fresh content without the extra effort.
+By leveraging **automated editing and SEO optimization**, Editor AI ensures your content remains **high-quality, engaging, and up-to-date**, without extra effort.
+
+Why use Editor AI?
+- AI-driven editing – Automatically refines your writing. 
+- Boosts SEO – Keeps content fresh and optimized for search engines.
+- Hands-free workflow – No manual editing required.
 
 ## How It Works
 
-1. Content is read from the specified directory.
-2. LLM is used to generate optimizations for the content.
-3. Changes are applied to the files.
-4. The optimized content is saved to the file.
+Editor AI scans and enhances your content using AI-based text optimization:
+1. Reads content from the specified directory.
+2. Uses **LLM-powered optimization** to refine and improve the text.
+3. Applies the optimized changes to your files.
+4. Saves the improved content automatically.
 
 ## Prerequisites
 
@@ -53,7 +60,7 @@ go run main.go --dir "absolute/path/to/files" --api_key "your_openai_api_key" --
 
 ### Customization
 
-> Note: For the time being, customization is possible solely in the code. Customizing via config files is on the roadmap. 
+> **Note:** Currently, customization is only possible in the code. Future updates will include configuration file support. 
 
 In order to achieve better results, you can customize the following:
 
@@ -89,11 +96,17 @@ Optimized 3 changes for article another-file.md
 
 ## Contributing
 
-Feel free to submit issues or pull requests. No special rules for now.
+🚀 We welcome contributions!
+
+- Report issues or suggest features via GitHub Issues.
+- Fork the repo and submit a Pull Request.
+- Star ⭐ the repository if you find it useful!
+
+Coming Soon: CONTRIBUTING.md file with setup instructions.
 
 ## Acknowledgements
 
-The current edit rules are based on this great article by [Eva Parish](https://evaparish.com/blog/how-i-edit).
+The current editing rules are inspired by [Eva Parish's guide](https://evaparish.com/blog/how-i-edit), a fantastic resource on writing improvement.
 
 ## License
 
