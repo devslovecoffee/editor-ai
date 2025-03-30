@@ -98,11 +98,14 @@ go run main.go --dir "absolute/path/to/files" --api_key "your_openai_api_key" --
 
 ### Command-line Arguments
 
-| Flag        | Description                                     | Required |
-| ----------- | ----------------------------------------------- | -------- |
-| `--dir`     | Absolute path to the directory containing files | ✅        |
-| `--api_key` | OpenAI API key                                  | ✅        |
-| `--glob`    | Glob pattern to filter files (default: `**`)    | ❌        |
+| Flag                | Description                                            | Required |
+| ------------------- | ------------------------------------------------------ | -------- |
+| `--dir`             | Absolute path to the directory containing files        | ✅        |
+| `--api_key`         | OpenAI API key                                         | ✅        |
+| `--glob`            | Glob pattern to filter files (default: `**`)           | ❌        |
+| `--config`          | Path to custom configuration file                      | ❌        |
+| `--init-config`     | Initialize a default configuration file                | ❌        |
+| `--init-config-path`| Path where to save the default configuration file      | ❌        |
 
 ### Customization
 
