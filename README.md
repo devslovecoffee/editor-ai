@@ -32,12 +32,55 @@ Editor AI improves your content through AI-based text optimization:
 
 ## Installation
 
-To get started, clone the repository and navigate to the project directory:
+To get started, you have two options:
+
+### Option 1: Use pre-built binaries (recommended)
+
+Download the latest release binary for your operating system from the [GitHub Releases page](https://github.com/petttr1/editor-ai/releases).
+
+```sh
+# Linux
+chmod +x editor-ai-linux-amd64
+./editor-ai-linux-amd64 --dir "/path/to/files" --api_key "your_openai_api_key"
+
+# macOS
+chmod +x editor-ai-darwin-amd64  # For Intel Macs
+./editor-ai-darwin-amd64 --dir "/path/to/files" --api_key "your_openai_api_key"
+
+# macOS (Apple Silicon)
+chmod +x editor-ai-darwin-arm64
+./editor-ai-darwin-arm64 --dir "/path/to/files" --api_key "your_openai_api_key"
+
+# Windows
+editor-ai-windows-amd64.exe --dir "C:\path\to\files" --api_key "your_openai_api_key"
+```
+
+### Option 2: Build from source
+
+Clone the repository and navigate to the project directory:
 
 ```sh
 git clone https://github.com/petttr1/editor-ai.git
 cd editor-ai
 ```
+
+Build using the provided Makefile:
+
+```sh
+# Build the application
+make build
+
+# Run tests
+make test
+
+# Build releases for all platforms
+make release
+
+# Run the application
+make run DIR="/path/to/files" API_KEY="your_openai_api_key" GLOB="*.md"
+```
+
+Run `make help` to see all available commands.
 
 ## Usage
 
@@ -63,18 +106,73 @@ go run main.go --dir "absolute/path/to/files" --api_key "your_openai_api_key" --
 
 ### Customization
 
-> **Note:** At present, customization is achievable through code modifications. Future updates will include configuration file support. 
+You can customize OptimSEO's behavior using configuration files in YAML format. This allows you to adapt the tool to different content types and requirements without modifying the code.
 
-In order to achieve better results, you can customize the following:
+#### Creating a Configuration File
 
-| Variable    | Filepath                   | Note                                                                                                                                                   |
-|-------------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `optimizeSystemPrompt`     | `internal/llm/prompts.go`  | Keep the `{{ .OutputRules }}` and `{{ .OutputFormat }}` within the prompt. Without this, the output may not be correct.                                |
-| `optimizeUserPrompt` | `internal/llm/prompts.go`  | Keep the `{{ .OutputRules }}` and `{{ .OutputFormat }}` within the prompt. Without this, the output may not be correct.                                |
-| `editRules`    | `internal/llm/rules.go`    | Edit if you have some custom rules you want the editor to incorporate.                                                                                 |
-| `contentRules`    | `internal/llm/rules.go`    | Edit if you have specific content that you don't want to be edited (e.g. Code blocks, figures, configs).                                               |
-| `replaceExamples`    | `internal/llm/examples.go` | If you notice the editor making a mistake on some part of your content, provide it as an example with the incorrect and the correct (expected output). |
+To create a default configuration file:
 
+```sh
+# Create a config file in the default location (~/.config/editor-ai/config.yaml)
+editor-ai --init-config
+
+# Create a config file in a custom location
+editor-ai --init-config-path ./my-config.yaml
+```
+
+#### Using a Configuration File
+
+To use a configuration file:
+
+```sh
+# Use a specific config file
+editor-ai --dir "/path/to/files" --api_key "your_openai_api_key" --config ./my-config.yaml
+
+# Use the default config file locations (searches in current directory, home directory, etc.)
+editor-ai --dir "/path/to/files" --api_key "your_openai_api_key"
+```
+
+The tool will automatically look for configuration files in these locations (in order):
+1. Current directory (`editor-ai.yaml` or `editor-ai.yml`)
+2. User's home directory (`.editor-ai.yaml` or `.editor-ai.yml`)
+3. `~/.config/editor-ai/config.yaml` or `~/.config/editor-ai/config.yml`
+
+#### Configuration File Structure
+
+```yaml
+# LLM Model to use
+model: gpt-4o-2024-08-06
+
+# Prompts Configuration
+prompts:
+  system_prompt: |
+    # Your system prompt template
+  user_prompt: |
+    # Your user prompt template
+  output_format: |
+    # Your output format template
+
+# Rules Configuration
+rules:
+  edit_rules: |
+    # Your editing rules
+  content_rules: |
+    # Your content handling rules
+  output_rules: |
+    # Your output formatting rules
+
+# Examples Configuration
+examples:
+  replace_examples: |
+    # Your replacement examples
+```
+
+See the `examples/` directory for complete configuration examples:
+- `examples/config.yaml` - Default configuration
+- `examples/marketing-config.yaml` - Specialized for marketing content
+- `examples/technical-docs-config.yaml` - Specialized for technical documentation
+
+> **Note:** The configuration file uses Go templates with variables like `{{ .Content }}`. Make sure to preserve these variables in your custom prompts to ensure proper functionality.
 
 ## Example Output
 
@@ -84,14 +182,14 @@ Optimized 3 changes for article another-file.md
 ```
 
 ## Roadmap
-- [ ] Add release binaries.
+- [x] Add release binaries.
 - [ ] Parallel processing of content.
-- [ ] Tests.
+- [x] Tests.
 - [ ] Support for more LLM providers.
 - [ ] LLM Model selection.
-- [ ] Customizable prompt via config file.
-- [ ] Customizable edit rules via config file.
-- [ ] Customizable examples via config file.
+- [x] Customizable prompt via config file.
+- [x] Customizable edit rules via config file.
+- [x] Customizable examples via config file.
 - [ ] Store memories for later reference after optimizing.
 - [ ] Read your content from the web.
 - [ ] Optimization as part of your github workflow (optimize on PR).
@@ -99,7 +197,7 @@ Optimized 3 changes for article another-file.md
 
 ## Contributing
 
-🚀 We welcome contributions!
+🚀 Contributions are welcome!
 
 - Report issues or suggest features via GitHub Issues.
 - Fork the repo and submit a Pull Request.

@@ -1,0 +1,160 @@
+# OptimSEO Configuration File
+
+# LLM Model to use
+# Supported values: gpt-4o-2024-08-06, gpt-4o, gpt-4-turbo, gpt-3.5-turbo
+# You can also specify any model ID supported by OpenAI directly
+model: gpt-4o-2024-08-06
+
+# Prompts Configuration
+prompts:
+  # System prompt that provides the initial instructions to the AI
+  system_prompt: |
+    Act as an expert writing coach and social media marketer.
+    Your job is to edit a piece of content following the edit rules provided to you.
+    Your main goal is to improve the writing and style.
+    Your secondary goal is to improve the content's visibility on search engines (SEO) to increase organic traffic.
+
+    When editing the content, ALWAYS follow these steps:
+    1. Carefully read and analyze the content.
+    2. Write a few sentences mentioning what is the main theme of the content, including the target audience, the kind of narrator, tone, mood, and key areas of improvements both in writing and SEO.
+    3. Carefully read the content again and identify opportunities to optimize the content. While doing so, follow the analysis you have written in the previous step, and the EDIT RULES.
+    4. Output the changes for the optimized content.
+    {{ if .EditRules }}
+
+    {{ .EditRules }}
+    {{ end }}
+    {{ if .ContentRules }}
+
+    {{ .ContentRules }}
+    {{ end }}
+
+    {{ .OutputRules }}
+
+    {{ .OutputFormat }}
+    {{ if .ReplaceExamples }}
+
+    {{ .ReplaceExamples }}
+    {{ end }}
+
+  # User prompt that provides the content to optimize
+  user_prompt: |
+    Improve the writing and style of the provided content.
+    Additionally, improve the content's visibility on search engines (SEO) to increase organic traffic.
+
+    Here is the content you are optimizing:
+    {{ .Content }}
+    {{ if or .EditRules .ContentRules }}
+
+    Remember the rules you need to follow:
+    {{ if .EditRules }}
+
+    {{ .EditRules }}
+    {{ end }}
+    {{ if .ContentRules }}
+
+    {{ .ContentRules }}
+    {{ end }}
+    {{ end }}
+
+    {{ .OutputRules }}
+
+    {{ .OutputFormat }}
+
+  # Output format for the AI responses
+  output_format: |
+    Output the changes for the optimized content in the following format:
+    <change>
+      <search>[search term]</search>
+      <replace>[replace term]</replace>
+    </change>
+
+# Rules Configuration
+rules:
+  # Rules for the editing process
+  edit_rules: |
+    Here are the rules that describe how to approach the editing process:
+    - Decide what you're actually saying.
+    - Who are you writing for?
+    - What is your main point? 
+
+    Repeat yourself (within reason)
+    - Look for ways that you can restate your point, clarify, or provide closure for the reader.
+
+    Simplify
+    - Strive to get to the point as quickly as possible.
+
+    Eliminate passive voice
+    - Rewrite a passive construction to active to make what you're saying clearer and make the sentence easier to read.
+
+    Don't use adverbs
+    - Replace an adverb with a better, more specific verb, or describe what you mean instead.
+
+    Don't assume knowledge
+    - Spell out acronyms on first use.
+
+    Be aware of your tone
+    - Know what kind of tone you're going for, and be consistent.
+    - Don't switch between formal / non-formal tones.
+
+  # Rules for handling content
+  content_rules: |
+    Here are the rules that describe how to handle the content:
+    - NEVER change the contents of a code block.
+    - NEVER change links.
+    - Avoid introducing any errors to the content structure (e.g. Yaml header).
+
+  # Rules for outputting changes
+  output_rules: |
+    Here are the rules that describe how to output the changes:
+    - For each optimization you find, output a separate change that can be replaced directly in the text.
+    - Each search term MUST be unique and match exactly once.
+    - Always consider the context of the full sentence before making a change and do not introduce grammatical errors.
+
+# Examples Configuration
+examples:
+  # Examples of incorrect replacements to help the AI avoid common mistakes
+  replace_examples: |
+    Here are some incorrect replacement examples that introduce various errors.
+    Use these only as examples, do not follow them word by word if you encounter a similar issue.
+
+    Examples:
+
+    Replace: The unfinished stuff from
+    Incorrect: Unfinished tasks from from
+    Correct: Unfinished tasks from
+
+    Replace: It works in the current, very simple, setup, but adding more imports
+    Incorrect: While this setup works, but adding more imports
+    Correct: While this setup works, adding more imports
+
+    Replace: we never have a whole side of the cube highlighted
+    Incorrect: we  the cube sides have inconsistent lighting coverage
+    Correct: the cube sides have inconsistent lighting coverage
+
+    Replace: Borrowing some code from this
+    Incorrect: Borrowing use the code example found at this
+    Correct: Borrowing the code example found at this
+
+    Replace: it's the new trend all the cool kids are doing
+    Incorrect: it's a trending design style popular among cool kids are doing
+    Correct: it's a trending design style popular among cool kids
+
+    Replace: Bento layouts actually don't tilt me, sorry
+    Incorrect: Bento layouts themselves don't tilt, apologies for the clickbait
+    Correct: Bento layouts themselves don't tilt me, apologies for the clickbait
+
+    Replace: tile is actually pretty simple and a really nice person - some Armando Canals already did that
+    Incorrect: tile is straightforward thanks to Armando Canals already did that
+    Correct: tile is straightforward thanks to Armando Canals who already did that
+
+    Replace: an extensible imports
+    Incorrect: an flexible imports
+    Correct: a flexible imports
+
+    Replace: Rotating then is a simple act of rotating layers
+    Incorrect: Rotating is simply of rotating layers
+    Correct: Rotating is simply the act of rotating layers
+
+    Replace: already did that
+    Incorrect: who has already did that
+    Correct: who has already done that 

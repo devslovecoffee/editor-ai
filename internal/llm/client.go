@@ -5,17 +5,27 @@ import (
 	"fmt"
 
 	article2 "github.com/petttr1/editor-ai/internal/article"
+	"github.com/petttr1/editor-ai/internal/config"
 
 	"github.com/sashabaranov/go-openai"
 )
 
 type Client struct {
 	client *openai.Client
+	config *config.Config
 }
 
 func NewClient(token string) *Client {
 	return &Client{
 		client: openai.NewClient(token),
+		config: config.DefaultConfig(),
+	}
+}
+
+func NewClientWithConfig(token string, cfg *config.Config) *Client {
+	return &Client{
+		client: openai.NewClient(token),
+		config: cfg,
 	}
 }
 
@@ -45,12 +55,12 @@ func (c *Client) GetOptimizedChanges(ctx context.Context, article *article2.Arti
 
 func (c *Client) createRequest(content string) (*openai.ChatCompletionRequest, error) {
 	systemMessage, err := InsertValues(
-		optimizeSystemPrompt, map[string]any{
-			"EditRules":       &editRules,
-			"ContentRules":    &contentRules,
-			"OutputRules":     outputRules,
-			"OutputFormat":    outputFormat,
-			"ReplaceExamples": &replaceExamples,
+		c.config.Prompts.SystemPrompt, map[string]any{
+			"EditRules":       &c.config.Rules.EditRules,
+			"ContentRules":    &c.config.Rules.ContentRules,
+			"OutputRules":     c.config.Rules.OutputRules,
+			"OutputFormat":    c.config.Prompts.OutputFormat,
+			"ReplaceExamples": &c.config.Examples.ReplaceExamples,
 		},
 	)
 	if err != nil {
@@ -58,20 +68,23 @@ func (c *Client) createRequest(content string) (*openai.ChatCompletionRequest, e
 	}
 
 	userMessage, err := InsertValues(
-		optimizeUserPrompt, map[string]any{
+		c.config.Prompts.UserPrompt, map[string]any{
 			"Content":      content,
-			"EditRules":    &editRules,
-			"ContentRules": &contentRules,
-			"OutputRules":  outputRules,
-			"OutputFormat": outputFormat,
+			"EditRules":    &c.config.Rules.EditRules,
+			"ContentRules": &c.config.Rules.ContentRules,
+			"OutputRules":  c.config.Rules.OutputRules,
+			"OutputFormat": c.config.Prompts.OutputFormat,
 		},
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to insert user prompt values: %w", err)
 	}
 
+	// Get model from config or use default
+	modelName := getModelName(c.config.Model)
+
 	return &openai.ChatCompletionRequest{
-		Model: model,
+		Model: modelName,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleSystem,
@@ -108,4 +121,24 @@ func (c *Client) extractChanges(content string) ([]*article2.Change, error) {
 		)
 	}
 	return articleChanges, nil
+}
+
+// getModelName maps a user-friendly model name to an OpenAI SDK model identifier
+func getModelName(model string) string {
+	// Map of user-friendly names to OpenAI SDK constants
+	modelMap := map[string]string{
+		"gpt-4o-2024-08-06": openai.GPT4o20240806,
+		"gpt-4o":            openai.GPT4o,
+		"gpt-4-turbo":       openai.GPT4Turbo,
+		"gpt-3.5-turbo":     openai.GPT3Dot5Turbo,
+	}
+
+	// If model is a known key, return the mapped value
+	if val, ok := modelMap[model]; ok {
+		return val
+	}
+
+	// If model isn't in our map, assume it's a direct OpenAI model name
+	// This allows users to specify exact model names if desired
+	return model
 }

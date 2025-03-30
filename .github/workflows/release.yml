@@ -1,0 +1,55 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+
+      - name: Build binaries
+        run: |
+          # Create output directory
+          mkdir -p dist
+          
+          # Build for Linux (amd64)
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o dist/editor-ai-linux-amd64 .
+          
+          # Build for macOS (amd64)
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o dist/editor-ai-darwin-amd64 .
+          
+          # Build for macOS (arm64)
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/editor-ai-darwin-arm64 .
+          
+          # Build for Windows (amd64)
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o dist/editor-ai-windows-amd64.exe .
+          
+          # Create checksums
+          cd dist
+          sha256sum * > checksums.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/editor-ai-linux-amd64
+            dist/editor-ai-darwin-amd64
+            dist/editor-ai-darwin-arm64
+            dist/editor-ai-windows-amd64.exe
+            dist/checksums.txt
+          generate_release_notes: true 
