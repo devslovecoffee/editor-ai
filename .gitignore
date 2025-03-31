@@ -26,3 +26,10 @@ go.work.sum
 
 .DS_Store
 .idea/
+
+# Build artifacts
+/dist/
+/editor-ai-linux-amd64
+/editor-ai-darwin-amd64
+/editor-ai-darwin-arm64
+/editor-ai-windows-amd64.exe
